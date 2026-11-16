@@ -280,9 +280,7 @@ def test_delete_order_is_tenant_isolated(client: TestClient) -> None:
         f"/api/v1/businesses/{business_id}/sales/orders/{order_id}",
         headers=outsider_headers,
     )
-    owner_list = client.get(
-        f"/api/v1/businesses/{business_id}/sales/orders", headers=owner_headers
-    )
+    owner_list = client.get(f"/api/v1/businesses/{business_id}/sales/orders", headers=owner_headers)
 
     assert outsider_delete.status_code == 404
     assert len(owner_list.json()) == 1
@@ -294,16 +292,12 @@ def test_delete_import_removes_all_associated_orders(client: TestClient) -> None
 
     imported = upload(client, path, headers)
     import_id = imported.json()["id"]
-    orders_before = client.get(
-        f"/api/v1/businesses/{business_id}/sales/orders", headers=headers
-    )
+    orders_before = client.get(f"/api/v1/businesses/{business_id}/sales/orders", headers=headers)
 
     deleted = client.delete(
         f"/api/v1/businesses/{business_id}/sales/imports/{import_id}", headers=headers
     )
-    orders_after = client.get(
-        f"/api/v1/businesses/{business_id}/sales/orders", headers=headers
-    )
+    orders_after = client.get(f"/api/v1/businesses/{business_id}/sales/orders", headers=headers)
 
     assert imported.status_code == 201
     assert len(orders_before.json()) == 2
@@ -323,9 +317,7 @@ def test_delete_import_is_tenant_isolated(client: TestClient) -> None:
         f"/api/v1/businesses/{business_id}/sales/imports/{import_id}",
         headers=outsider_headers,
     )
-    orders = client.get(
-        f"/api/v1/businesses/{business_id}/sales/orders", headers=owner_headers
-    )
+    orders = client.get(f"/api/v1/businesses/{business_id}/sales/orders", headers=owner_headers)
 
     assert outsider_delete.status_code == 404
     assert len(orders.json()) == 2
@@ -350,9 +342,7 @@ def test_analytics_updates_after_order_deletion(client: TestClient) -> None:
         params={"date_from": "2026-09-01", "date_to": "2026-09-30"},
     )
 
-    client.delete(
-        f"/api/v1/businesses/{business_id}/sales/orders/{order_id}", headers=headers
-    )
+    client.delete(f"/api/v1/businesses/{business_id}/sales/orders/{order_id}", headers=headers)
 
     analytics_after = client.get(
         f"/api/v1/businesses/{business_id}/analytics/summary",

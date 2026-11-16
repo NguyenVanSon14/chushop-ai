@@ -7,7 +7,6 @@ from sqlalchemy.orm import Session
 
 from app.integrations.llm.client import get_llm_provider
 from app.modules.assistant.model import AssistantConversation, utc_now
-from app.modules.assistant.provider import DeterministicExplanationProvider, ExplanationProvider
 from app.modules.assistant.repository import AssistantRepository
 from app.modules.assistant.schema import (
     AssistantMessageCreate,
@@ -15,7 +14,12 @@ from app.modules.assistant.schema import (
     ConversationCreate,
     ConversationDetail,
 )
-from app.modules.assistant.tools import AnalyticsToolExecutor, AssistantIntent, ToolOutput, classify_intent
+from app.modules.assistant.tools import (
+    AnalyticsToolExecutor,
+    AssistantIntent,
+    ToolOutput,
+    classify_intent,
+)
 from app.modules.businesses.access import require_business_member
 from app.modules.businesses.model import Business
 from app.modules.users.model import User

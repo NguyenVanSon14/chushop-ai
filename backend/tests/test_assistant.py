@@ -235,9 +235,7 @@ def test_real_llm_provider_tool_selection_and_explanation(monkeypatch) -> None:
                         "choices": [
                             {
                                 "message": {
-                                    "tool_calls": [
-                                        {"function": {"name": "get_profit_summary"}}
-                                    ]
+                                    "tool_calls": [{"function": {"name": "get_profit_summary"}}]
                                 }
                             }
                         ]
@@ -245,11 +243,7 @@ def test_real_llm_provider_tool_selection_and_explanation(monkeypatch) -> None:
                 # Explanation prompt
                 return {
                     "choices": [
-                        {
-                            "message": {
-                                "content": "Tháng này shop đạt 423.000 VND lợi nhuận ròng."
-                            }
-                        }
+                        {"message": {"content": "Tháng này shop đạt 423.000 VND lợi nhuận ròng."}}
                     ]
                 }
 
@@ -286,7 +280,9 @@ def test_real_llm_provider_handles_missing_key_and_network_error(monkeypatch) ->
             },
         )
 
-    output, explanation = no_key_provider.process_question("Tháng này tôi lời bao nhiêu?", execute_tool)
+    output, explanation = no_key_provider.process_question(
+        "Tháng này tôi lời bao nhiêu?", execute_tool
+    )
     assert output.name == "financial_summary"
     assert "100.000 VND" in explanation
 
@@ -298,7 +294,9 @@ def test_real_llm_provider_handles_missing_key_and_network_error(monkeypatch) ->
 
     monkeypatch.setattr("httpx.Client.post", mock_post_error)
 
-    output, explanation = error_provider.process_question("Tháng này tôi lời bao nhiêu?", execute_tool)
+    output, explanation = error_provider.process_question(
+        "Tháng này tôi lời bao nhiêu?", execute_tool
+    )
     assert output.name == "financial_summary"
     assert "100.000 VND" in explanation
 
@@ -320,4 +318,3 @@ def test_all_6_mvp_questions_supported(client: TestClient) -> None:
         reply = ask(client, business_id, conversation_id, headers, question)
         assert reply["tool_name"] == expected_tool, f"Failed for question: {question}"
         assert reply["content"] is not None and len(reply["content"]) > 0
-

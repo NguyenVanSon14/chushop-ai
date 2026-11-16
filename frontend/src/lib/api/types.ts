@@ -3,6 +3,7 @@ export type User = {
   email: string;
   full_name: string;
   is_active: boolean;
+  is_platform_admin: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -190,4 +191,32 @@ export type AssistantConversationDetail = AssistantConversation & {
 export type AssistantReply = {
   user_message: AssistantMessage;
   assistant_message: AssistantMessage;
+};
+
+export type AdminUser = {
+  id: string;
+  email: string;
+  full_name: string;
+  is_active: boolean;
+  is_platform_admin: boolean;
+  created_at: string;
+};
+
+export type AdminBusiness = {
+  id: string;
+  name: string;
+  slug: string;
+  currency: string;
+  timezone: string;
+  created_at: string;
+};
+
+export type AdminAuditLog = {
+  id: string;
+  actor_user_id: string;
+  action: string;
+  target_type: string;
+  target_id: string;
+  details: Record<string, unknown>;
+  created_at: string;
 };

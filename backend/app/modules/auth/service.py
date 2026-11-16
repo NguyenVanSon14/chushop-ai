@@ -38,7 +38,11 @@ class AuthService:
 
     def login(self, payload: LoginRequest) -> TokenResponse:
         user = self.users.get_by_email(normalize_email(str(payload.email)))
-        if user is None or not verify_password(payload.password, user.password_hash):
+        if (
+            user is None
+            or not user.is_active
+            or not verify_password(payload.password, user.password_hash)
+        ):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Email hoặc mật khẩu không đúng",

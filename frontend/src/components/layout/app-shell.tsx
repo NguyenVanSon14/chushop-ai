@@ -1,8 +1,10 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
+import { getMe } from "@/features/auth/api";
 import { selectActiveBusiness } from "@/features/businesses/hooks";
 import type { Business } from "@/lib/api/types";
 import { clearAccessToken } from "@/lib/auth/token-storage";
@@ -31,6 +33,7 @@ export function AppShell({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const currentUser = useQuery({ queryKey: ["auth", "me"], queryFn: getMe });
 
   function logout() {
     clearAccessToken();
@@ -99,7 +102,12 @@ export function AppShell({
           })}
         </nav>
 
-        <button className="mt-auto flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-emerald-100/70 transition hover:bg-white/10 hover:text-white" onClick={logout} type="button">
+        {currentUser.data?.is_platform_admin && (
+          <Link className="mt-auto flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-emerald-100/70 transition hover:bg-white/10 hover:text-white" href="/admin">
+            <NavIcon name="admin" /> Quản trị hệ thống
+          </Link>
+        )}
+        <button className={cn("flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-emerald-100/70 transition hover:bg-white/10 hover:text-white", !currentUser.data?.is_platform_admin && "mt-auto")} onClick={logout} type="button">
           <NavIcon name="logout" /> Đăng xuất
         </button>
       </aside>
@@ -108,6 +116,7 @@ export function AppShell({
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[var(--border)] bg-white/90 px-5 backdrop-blur-xl lg:hidden">
           <Link href="/dashboard" className="flex items-center gap-2.5"><BrandMark small /><span className="font-extrabold tracking-tight text-emerald-950">ChủShop AI</span></Link>
           <div className="flex items-center gap-2">
+            {currentUser.data?.is_platform_admin && <Link aria-label="Quản trị hệ thống" className="grid size-9 place-items-center rounded-xl text-[var(--muted)] transition hover:bg-emerald-50 hover:text-emerald-800" href="/admin"><NavIcon name="admin" /></Link>}
             {businesses.length > 1 ? (
               <select aria-label="Chọn doanh nghiệp" className="max-w-36 rounded-lg border border-[var(--border)] bg-white px-2 py-1.5 text-xs font-semibold outline-none" onChange={(event) => changeBusiness(event.target.value)} value={businessId}>{businesses.map((business) => <option key={business.id} value={business.id}>{business.name}</option>)}</select>
             ) : (
@@ -140,6 +149,7 @@ function NavIcon({ name }: { name: string }) {
     sales: <><path d="M4 19V9m6 10V5m6 14v-7m4 7H2" /></>,
     expenses: <><path d="M4 6h16v12H4z" /><path d="M4 10h16M8 14h3" /></>,
     assistant: <><path d="M12 3a7 7 0 0 0-7 7v2a4 4 0 0 0 4 4h1l2 4 2-4h1a4 4 0 0 0 4-4v-2a7 7 0 0 0-7-7Z" /><path d="M9 10h.01M15 10h.01" /></>,
+    admin: <><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6l-7-3Z" /><path d="m9 12 2 2 4-4" /></>,
     logout: <><path d="M10 17l5-5-5-5M15 12H3M14 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5" /></>,
   };
   return <svg aria-hidden className="size-5 shrink-0" fill={name === "dashboard" ? "currentColor" : "none"} stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" viewBox="0 0 24 24">{paths[name]}</svg>;

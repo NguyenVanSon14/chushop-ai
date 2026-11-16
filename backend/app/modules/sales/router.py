@@ -74,9 +74,7 @@ def delete_order(
     db: DbSession,
     current_user: CurrentUser,
 ) -> None:
-    SalesService(db).delete_order(
-        business_id=business_id, order_id=order_id, user=current_user
-    )
+    SalesService(db).delete_order(business_id=business_id, order_id=order_id, user=current_user)
 
 
 @router.delete("/imports/{import_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -86,6 +84,4 @@ def delete_import(
     db: DbSession,
     current_user: CurrentUser,
 ) -> None:
-    SalesService(db).delete_import(
-        business_id=business_id, import_id=import_id, user=current_user
-    )
+    SalesService(db).delete_import(business_id=business_id, import_id=import_id, user=current_user)

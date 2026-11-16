@@ -12,7 +12,10 @@ class ToolDefinition:
 AVAILABLE_TOOLS = [
     ToolDefinition(
         name="get_profit_summary",
-        description="Lấy tổng quan lợi nhuận ròng, doanh thu, giá vốn, chi phí và biên lợi nhuận của doanh nghiệp.",
+        description=(
+            "Lấy tổng quan lợi nhuận ròng, doanh thu, giá vốn, chi phí "
+            "và biên lợi nhuận của doanh nghiệp."
+        ),
     ),
     ToolDefinition(
         name="get_top_products",
@@ -32,7 +35,10 @@ AVAILABLE_TOOLS = [
     ),
     ToolDefinition(
         name="compare_channels",
-        description="So sánh hiệu quả và lợi nhuận đóng góp giữa các kênh bán (Shopee, TikTok, Cửa hàng...).",
+        description=(
+            "So sánh hiệu quả và lợi nhuận đóng góp giữa các kênh bán "
+            "(Shopee, TikTok, Cửa hàng...)."
+        ),
     ),
 ]
 

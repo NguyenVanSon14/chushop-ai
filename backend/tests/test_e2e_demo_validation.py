@@ -4,12 +4,9 @@ Validates all 11 financial metrics and 6 AI Assistant questions on the
 demo dataset using Python Money Brain as the sole authoritative source.
 """
 
-from datetime import date
-
 from fastapi.testclient import TestClient
 
 from scripts.seed_demo_data import seed_data
-from tests.conftest import register_and_login
 
 
 def test_e2e_demo_financial_analytics_and_ai_assistant(client: TestClient, db) -> None:

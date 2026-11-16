@@ -5,7 +5,6 @@ channels (SHOPEE, TIKTOK), operating expenses, and deterministic financial
 metrics across 2 months.
 """
 
-import os
 import random
 from datetime import UTC, date, datetime, timedelta
 from zoneinfo import ZoneInfo
@@ -128,7 +127,9 @@ def seed_data(session: Session) -> dict[str, object]:
     # 4. Generate Sales Orders
     for day_offset in range(60):
         # Date range from 2026-08-01 to 2026-09-29
-        order_date = datetime(2026, 8, 1, 10, 0, 0, tzinfo=ZoneInfo("Asia/Ho_Chi_Minh")) + timedelta(days=day_offset)
+        order_date = datetime(
+            2026, 8, 1, 10, 0, 0, tzinfo=ZoneInfo("Asia/Ho_Chi_Minh")
+        ) + timedelta(days=day_offset)
         utc_ordered_at = order_date.astimezone(UTC)
 
         # 10 to 12 orders per day
@@ -136,7 +137,7 @@ def seed_data(session: Session) -> dict[str, object]:
         for i in range(daily_order_num):
             orders_count += 1
             channel = random.choice(channels)
-            ext_id = f"ORD-{order_date.strftime('%Y%m%d')}-{i+1:03d}"
+            ext_id = f"ORD-{order_date.strftime('%Y%m%d')}-{i + 1:03d}"
 
             # Shopee fees ~8-12%, TikTok fees ~10-14% plus fixed shipping/affiliate
             base_fee = 15_000 if channel == "SHOPEE" else 22_000
@@ -157,7 +158,7 @@ def seed_data(session: Session) -> dict[str, object]:
             items_to_add: list[tuple[Product, int]] = []
             if random.random() < 0.35:
                 items_to_add.append((loss_product, random.randint(1, 3)))
-            
+
             # Add 1-2 regular products
             reg_selected = random.sample(normal_products, random.randint(1, 2))
             for rp in reg_selected:
@@ -191,7 +192,12 @@ def seed_data(session: Session) -> dict[str, object]:
         # September 2026
         ("Tiền thuê mặt bằng tháng 9", "Mặt bằng", 15_000_000, date(2026, 9, 1)),
         ("Lương nhân viên bán hàng tháng 9", "Lương", 25_000_000, date(2026, 9, 5)),
-        ("Chi phí Quảng cáo Shopee & TikTok Ads tháng 9", "Marketing", 22_000_000, date(2026, 9, 10)),
+        (
+            "Chi phí Quảng cáo Shopee & TikTok Ads tháng 9",
+            "Marketing",
+            22_000_000,
+            date(2026, 9, 10),
+        ),
         ("Chi phí Điện nước & Internet tháng 9", "Vận hành", 3_800_000, date(2026, 9, 15)),
         ("Chi phí Bao bì & Đóng gói tháng 9", "Vật tư", 5_000_000, date(2026, 9, 20)),
     ]

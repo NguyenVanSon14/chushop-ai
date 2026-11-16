@@ -73,7 +73,9 @@ OPENAI_TOOLS = [
         "type": "function",
         "function": {
             "name": "explain_profit_change",
-            "description": "Phân tích nguyên nhân lợi nhuận sụt giảm hoặc thay đổi so với kỳ trước.",
+            "description": (
+                "Phân tích nguyên nhân lợi nhuận sụt giảm hoặc thay đổi so với kỳ trước."
+            ),
             "parameters": {"type": "object", "properties": {}, "required": []},
         },
     },
@@ -81,7 +83,7 @@ OPENAI_TOOLS = [
         "type": "function",
         "function": {
             "name": "compare_channels",
-            "description": "So sánh hiệu quả lợi nhuận giữa các kênh bán (Shopee, TikTok, Cửa hàng...).",
+            "description": "So sánh lợi nhuận giữa các kênh bán (Shopee, TikTok, Cửa hàng...).",
             "parameters": {"type": "object", "properties": {}, "required": []},
         },
     },
@@ -133,7 +135,7 @@ class RealLLMProvider:
                 explanation = self.fallback.deterministic.explain(output)
                 return output, explanation
 
-            # 2. Ask LLM to generate Vietnamese explanation using authoritative Python Money Brain tool result
+            # Ask the LLM to explain the authoritative Python Money Brain result.
             explanation = self._generate_explanation(question, output)
             return output, explanation
 
@@ -153,7 +155,8 @@ class RealLLMProvider:
                 {
                     "role": "system",
                     "content": (
-                        "Bạn là Trợ lý tài chính ChủShop AI. Nhiệm vụ của bạn là chọn đúng duy nhất "
+                        "Bạn là Trợ lý tài chính ChủShop AI. Nhiệm vụ của bạn là chọn "
+                        "đúng duy nhất "
                         "1 tool phù hợp để tra cứu số liệu tài chính theo câu hỏi của chủ shop. "
                         "Nếu câu hỏi yêu cầu tư vấn chiến lược/mẹo kinh doanh không có trong tool, "
                         "không chọn tool nào."
@@ -167,7 +170,9 @@ class RealLLMProvider:
         }
 
         with httpx.Client(timeout=10.0) as client:
-            response = client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload)
+            response = client.post(
+                f"{self.base_url}/chat/completions", headers=headers, json=payload
+            )
             response.raise_for_status()
             data = response.json()
 
@@ -198,7 +203,7 @@ class RealLLMProvider:
         )
 
         user_prompt = (
-            f"Câu hỏi của chủ shop: \"{question}\"\n"
+            f'Câu hỏi của chủ shop: "{question}"\n'
             f"Tên tool: {output.name}\n"
             f"Kết quả số liệu từ Money Brain (JSON):\n"
             f"{json.dumps(output.result, ensure_ascii=False)}"
@@ -214,7 +219,9 @@ class RealLLMProvider:
         }
 
         with httpx.Client(timeout=10.0) as client:
-            response = client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload)
+            response = client.post(
+                f"{self.base_url}/chat/completions", headers=headers, json=payload
+            )
             response.raise_for_status()
             data = response.json()
 

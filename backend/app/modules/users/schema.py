@@ -11,5 +11,6 @@ class UserRead(BaseModel):
     email: EmailStr
     full_name: str
     is_active: bool
+    is_platform_admin: bool
     created_at: datetime
     updated_at: datetime

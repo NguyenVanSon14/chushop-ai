@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from app.modules.admin.router import router as admin_router
 from app.modules.analytics.router import router as analytics_router
 from app.modules.assistant.router import router as assistant_router
 from app.modules.auth.router import router as auth_router
@@ -9,6 +10,7 @@ from app.modules.products.router import router as products_router
 from app.modules.sales.router import router as sales_router
 
 api_router = APIRouter()
+api_router.include_router(admin_router)
 api_router.include_router(analytics_router)
 api_router.include_router(assistant_router)
 api_router.include_router(auth_router)

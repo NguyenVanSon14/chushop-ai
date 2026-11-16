@@ -40,7 +40,7 @@ python -m alembic upgrade head
 python -m uvicorn app.main:app --reload
 ```
 
-API chạy tại `http://localhost:8000`; tài liệu OpenAPI tại `http://localhost:8000/docs`. Access token Bearer hết hạn sau `ACCESS_TOKEN_EXPIRE_MINUTES` (mặc định 60 phút).
+API chạy tại `http://localhost:8000`; tài liệu OpenAPI tại `http://localhost:8000/docs`. Dùng `/health` để kiểm tra tiến trình và `/ready` để kiểm tra cả kết nối database. Access token Bearer hết hạn sau `ACCESS_TOKEN_EXPIRE_MINUTES` (mặc định 60 phút).
 
 Kiểm tra backend:
 
@@ -100,11 +100,26 @@ POST /api/v1/businesses/{business_id}/assistant/conversations
 GET  /api/v1/businesses/{business_id}/assistant/conversations
 GET  /api/v1/businesses/{business_id}/assistant/conversations/{conversation_id}
 POST /api/v1/businesses/{business_id}/assistant/conversations/{conversation_id}/messages
+GET  /api/v1/admin/users
+PATCH /api/v1/admin/users/{user_id}/status
+GET  /api/v1/admin/businesses
+GET  /api/v1/admin/audit-logs
 ```
 
 Endpoint analytics nhận `date_from` và `date_to` theo định dạng `YYYY-MM-DD`. Tin nhắn gửi trợ lý có thể nhận cùng khoảng ngày; nếu bỏ trống, backend dùng từ đầu tháng hiện tại đến hôm nay theo múi giờ doanh nghiệp. Công thức được mô tả tại `docs/product/financial-metrics.md`, giới hạn trợ lý tại `docs/product/ai-assistant.md`, và định dạng CSV/XLSX tại `docs/product/sales-import.md`.
 
 Mọi API doanh nghiệp đều yêu cầu Bearer token và chỉ trả dữ liệu nơi người dùng có `BusinessMember`.
+
+## Platform Admin
+
+Quyền quản trị hệ thống tách biệt với vai trò OWNER/MANAGER/MEMBER trong doanh nghiệp. Hãy đăng ký tài khoản bình thường trước, sau đó cấp quyền bằng lệnh vận hành:
+
+```powershell
+cd backend
+python -m app.cli.platform_admin --email admin@example.com
+```
+
+Thu hồi quyền bằng cùng lệnh với cờ `--revoke`. Không có tài khoản hoặc mật khẩu admin mặc định. Xem quy trình và giới hạn tại `docs/operations/platform-admin.md`.
 
 ## Cấu hình Trợ lý AI (LLM Provider)
 
@@ -114,4 +129,3 @@ Trợ lý AI hỗ trợ cả **Mock Provider** (local deterministic cho kiểm t
 - `LLM_API_KEY`: API Key của nhà cung cấp LLM
 - `LLM_MODEL`: Tên model (ví dụ: `gpt-4o-mini`, `gemini-1.5-flash`)
 - `LLM_BASE_URL`: URL API tùy chỉnh (mặc định `https://api.openai.com/v1`)
-

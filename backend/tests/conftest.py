@@ -12,6 +12,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.core.database import Base, get_db
 from app.main import app
+from app.modules.admin import model as admin_models  # noqa: F401
 from app.modules.assistant import model as assistant_models  # noqa: F401
 from app.modules.businesses import model as business_models  # noqa: F401
 from app.modules.expenses import model as expense_models  # noqa: F401

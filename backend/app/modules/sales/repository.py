@@ -134,9 +134,7 @@ class SalesRepository:
 
     def orders_by_import(self, import_id: UUID) -> list[SalesOrder]:
         return list(
-            self.db.scalars(
-                select(SalesOrder).where(SalesOrder.sales_import_id == import_id)
-            ).all()
+            self.db.scalars(select(SalesOrder).where(SalesOrder.sales_import_id == import_id)).all()
         )
 
     def delete_import(self, record: SalesImport) -> None:
